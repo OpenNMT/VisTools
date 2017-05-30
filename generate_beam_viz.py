@@ -13,6 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+# Modified by Alexander Rush, 2007
+
 """ Generate beam search visualization.
 """
 
@@ -26,7 +29,6 @@ import os
 import json
 import shutil
 from string import Template
-import numpy as np
 
 import networkx as nx
 from networkx.readwrite import json_graph
@@ -39,9 +41,6 @@ PARSER.add_argument(
 PARSER.add_argument(
     "-o", "--output_dir", type=str, required=True,
     help="path to the output directory")
-PARSER.add_argument(
-    "-v", "--vocab", type=str, required=False,
-    help="path to the vocabulary file")
 ARGS = PARSER.parse_args()
 
 
@@ -89,22 +88,17 @@ def create_graph(predicted_ids, parent_ids, scores, vocab=None):
 
 
 def main():
-  beam_data = np.load(ARGS.data)
+  beam_data = json.load(open(ARGS.data, 'r'))
 
   # Optionally load vocabulary data
   vocab = None
-  if ARGS.vocab:
-    with open(ARGS.vocab) as file:
-      vocab = file.readlines()
-    vocab = [_.strip() for _ in vocab]
-    vocab += ["UNK", "SEQUENCE_START", "SEQUENCE_END"]
 
   if not os.path.exists(ARGS.output_dir):
     os.makedirs(ARGS.output_dir)
 
   # Copy required files
-  shutil.copy2("./bin/tools/beam_search_viz/tree.css", ARGS.output_dir)
-  shutil.copy2("./bin/tools/beam_search_viz/tree.js", ARGS.output_dir)
+  shutil.copy2("./beam_search_viz/tree.css", ARGS.output_dir)
+  shutil.copy2("./beam_search_viz/tree.js", ARGS.output_dir)
 
   for idx in range(len(beam_data["predicted_ids"])):
     predicted_ids = beam_data["predicted_ids"][idx]
