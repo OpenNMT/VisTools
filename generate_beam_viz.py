@@ -67,9 +67,10 @@ def _add_graph_level(graph, level, parent_ids, names, scores):
   for i, parent_id in enumerate(parent_ids):
     new_node = (level, i)
     parent_node = (level - 1, parent_id)
+    score_str = '%.3f' % float(scores[i]) if scores[i] is not None else '-inf'
     graph.add_node(new_node)
     graph.node[new_node]["name"] = names[i]
-    graph.node[new_node]["score"] = str(scores[i])
+    graph.node[new_node]["score"] = score_str
     graph.node[new_node]["size"] = 100
     # Add an edge to the parent
     graph.add_edge(parent_node, new_node)
