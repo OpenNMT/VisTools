@@ -96,7 +96,7 @@ def main():
   if not os.path.exists(ARGS.output_dir):
     os.makedirs(ARGS.output_dir)
 
-  path_base = os.path.dirname(__file__)
+  path_base = os.path.dirname(os.path.realpath(__file__))
 
   # Copy required files
   shutil.copy2(path_base+"/beam_search_viz/tree.css", ARGS.output_dir)
