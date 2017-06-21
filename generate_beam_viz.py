@@ -76,7 +76,7 @@ def _add_graph_level(graph, level, parent_ids, names, scores):
 
 def create_graph(predicted_ids, parent_ids, scores, vocab=None):
   def get_node_name(pred):
-    return vocab[pred] if vocab else str(pred)
+    return vocab[pred] if vocab else pred
 
   seq_length = len(predicted_ids) #.shape[0]
   graph = nx.DiGraph()
@@ -115,7 +115,7 @@ def main():
 
     json_str = json.dumps(
         json_graph.tree_data(graph, (0, 0)),
-        ensure_ascii=False)
+        ensure_ascii=True)
 
     html_str = HTML_TEMPLATE.substitute(DATA=json_str)
     output_path = os.path.join(ARGS.output_dir, "{:06d}.html".format(idx))
